@@ -5,5 +5,10 @@ var	rootPath = path.normalize(__dirname + '/../../');
 module.exports = {
     rootPath : rootPath,
     port: process.env.NODE_ENV || 3350,
-    environment: 'development'
+    environment: 'development',
+    session: {
+        resave: true,
+        saveUninitialized: true,
+        secret: 'somespecialsecret'
+    }
 };
