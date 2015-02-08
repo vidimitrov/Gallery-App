@@ -11,4 +11,14 @@ module.exports = (function () {
             user: req.seneca.user
         });
     });
+
+    app.post('/someUrl', function (req, res) {
+        console.log('Params: ', req.body);
+        res.send(req.body);
+    });
+
+    app.get('/someUrl', function (req, res) {
+        console.log('Request:', req);
+        res.send('GG');
+    });
 })();
