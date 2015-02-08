@@ -6,6 +6,9 @@ module.exports = (function(){
 
     app.use('/auth', auth);
     app.use('/api/users', users);
+    app.use('/', function (req, res) {
+        res.send('This is the Gallery App API');
+    });
 
     // Catch 404 and forward to error handler
     app.use(function (req, res, next) {

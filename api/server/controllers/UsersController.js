@@ -1,17 +1,42 @@
-var seneca = require('./../../config/mongoose');
-//var userEntity = seneca.make$('user');
+var User = require('./../models/User');
 
 module.exports = (function () {
 
-    function uploadImage (req, res) {
+    function getAllImages (req, res) {
         var userId = req.params.userId;
 
-        console.log(req.body);
+        User.findById(userId, function (error, user) {
+            if (error) {
+                res.send(404, 'User not found!');
+            }
 
-        res.send('Uploading...' + 'User id: ' + userId);
+            res.send(user.images);
+        });
+    }
+
+    function uploadImage (req, res) {
+        var userId = req.params.userId;
+        var imageEncodedSrc = req.body.src;
+
+        User.findById(userId, function (error, user) {
+            if (error) {
+                res.send(404, 'User not found!');
+            }
+
+            user.images.push(imageEncodedSrc);
+
+            user.save(function (error) {
+                if (error) {
+                    res.send(500, 'Cannot upload the new picture!');
+                }
+
+                res.send('Picture uploaded successfully!');
+            });
+        });
     }
 
     return {
-        uploadImage: uploadImage
+        uploadImage: uploadImage,
+        getAllImages: getAllImages
     }
 })();
