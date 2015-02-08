@@ -71,17 +71,36 @@ angular.module('starter.controllers', ['ngCordova'])
             };
 }])
 
-.controller('GalleryController', ['$scope', 'identity', function($scope, identity) {
-    $scope.images = identity.getCurrentUser().images;
-}])
+.controller('GalleryController', ['$scope', 'identity', '$http', '$q',
+    function($scope, identity, $http, $q) {
+        var currentUser = identity.getCurrentUser();
+
+        if (currentUser) {
+            getAllImages(currentUser._id)
+                .then(function (images) {
+                    $scope.images = images;
+                });
+        }
+
+        function getAllImages(userId) {
+            var deffered = $q.defer();
+
+            $http.get('http://galleryappapi-vdsystem.rhcloud.com/api/users/' + userId + '/images')
+                .success(function(data, status, headers, config) {
+                    deffered.resolve(data);
+                })
+                .error(function(data, status, headers, config) {
+
+                });
+
+            return deffered.promise;
+        }
+    }
+])
 
 .controller('UploadController', ['$scope', 'identity', '$cordovaCamera', '$http',
         function($scope, identity, $cordovaCamera, $http) {
             var currentUser = identity.getCurrentUser();
-
-            if (currentUser) {
-                $scope.images = currentUser.images;
-            }
 
             $scope.takePicture = function() {
                 var options = {
@@ -97,9 +116,6 @@ angular.module('starter.controllers', ['ngCordova'])
                 };
 
                 $cordovaCamera.getPicture(options).then(function(pictureData) {
-                    // TODO: Remove the alert when ready
-                    alert(pictureData);
-
                     $scope.uploadPicture(pictureData);
                 }, function(err) {
 
@@ -109,7 +125,7 @@ angular.module('starter.controllers', ['ngCordova'])
             $scope.uploadPicture = function(data) {
                 var req = {
                     method: 'POST',
-                    url: 'http://127.0.0.1:3350/' + currentUser._id + '/uploadPhoto',
+                    url: 'http://galleryappapi-vdsystem.rhcloud.com/api/users/' + currentUser._id + '/uploadImage',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
@@ -119,7 +135,9 @@ angular.module('starter.controllers', ['ngCordova'])
                             str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
                         return str.join("&");
                     },
-                    data: data
+                    data: {
+                        src: data
+                    }
                 };
 
                 $http(req)

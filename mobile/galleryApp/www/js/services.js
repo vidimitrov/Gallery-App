@@ -45,7 +45,7 @@ angular.module('starter.services', ['ngCookies'])
 
             var req = {
                 method: 'POST',
-                url: 'http://127.0.0.1:3350/auth/signup',
+                url: 'http://galleryappapi-vdsystem.rhcloud.com/auth/signup',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
@@ -78,7 +78,7 @@ angular.module('starter.services', ['ngCookies'])
 
             var req = {
                 method: 'POST',
-                url: 'http://127.0.0.1:3350/auth/login',
+                url: 'http://galleryappapi-vdsystem.rhcloud.com/auth/login',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
@@ -110,7 +110,7 @@ angular.module('starter.services', ['ngCookies'])
         logout: function() {
             var deferred = $q.defer();
 
-            $http.get('http://127.0.0.1:3350/auth/logout')
+            $http.get('http://galleryappapi-vdsystem.rhcloud.com/auth/logout')
                 .success(function() {
                     identity.setCurrentUser(undefined);
                     deferred.resolve();
