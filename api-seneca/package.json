@@ -1,0 +1,29 @@
+{
+  "name": "Gallery-App",
+  "version": "0.0.1",
+  "author": "Veselin Dimitrov",
+  "description": "Simple express api with Ionic mobile app for managing user's gallery",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vidimitrov/Gallery-App.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "~1.9.0",
+    "cookie-parser": "~1.3.2",
+    "express": "~4.9.5",
+    "express-session": "~1.8.2",
+    "method-override": "~2.2.0",
+    "optimist": "~0.6.1",
+    "seneca": "plugin",
+    "seneca-auth": "~0.4.0",
+    "seneca-jsonrest-api": "~0.3.1",
+    "seneca-mongo-store": "^0.2.0",
+    "seneca-perm": "~0.4.0",
+    "seneca-user": "~0.2.10"
+  }
+}
