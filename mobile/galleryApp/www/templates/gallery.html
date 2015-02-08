@@ -1,0 +1,14 @@
+<ion-view view-title="Gallery">
+    <ion-content ng-show="identity.isAuthenticated()">
+        <h3>Welcome to your gallery</h3>
+        <ion-list>
+            <ion-item ng-repeat="image in images">
+                <img ng-src="data:image/jpeg;base64,{{image.src}}" alt=""/>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+    <ion-content ng-hide="identity.isAuthenticated()">
+        <h1>Please login to see your gallery</h1>
+    </ion-content>
+</ion-view>
+

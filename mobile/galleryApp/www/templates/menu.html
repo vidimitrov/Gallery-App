@@ -12,25 +12,31 @@
     <ion-nav-view name="menuContent"></ion-nav-view>
   </ion-side-menu-content>
 
-  <ion-side-menu side="left">
-    <ion-header-bar class="bar-stable">
-      <h1 class="title">Left</h1>
-    </ion-header-bar>
-    <ion-content>
-      <ion-list>
-        <ion-item nav-clear menu-close ng-click="login()">
-          Login
-        </ion-item>
-        <ion-item nav-clear menu-close href="#/app/search">
-          Search
-        </ion-item>
-        <ion-item nav-clear menu-close href="#/app/browse">
-          Browse
-        </ion-item>
-        <ion-item nav-clear menu-close href="#/app/playlists">
-          Playlists
-        </ion-item>
-      </ion-list>
-    </ion-content>
-  </ion-side-menu>
+    <ion-side-menu side="left">
+        <ion-header-bar class="bar-stable">
+            <h1 class="title">Navigation</h1>
+        </ion-header-bar>
+        <ion-content>
+            <ion-list>
+                <ion-item nav-clear menu-close ng-click="login()" ng-show="!identity.isAuthenticated()">
+                    Login
+                </ion-item>
+                <ion-item nav-clear menu-close ng-click="signup()" ng-show="!identity.isAuthenticated()">
+                    Sign Up
+                </ion-item>
+                <ion-item nav-clear menu-close ng-click="doLogout()" ng-show="identity.isAuthenticated()">
+                    Logout
+                </ion-item>
+                <ion-item nav-clear menu-close href="#/app/home">
+                    Home
+                </ion-item>
+                <ion-item nav-clear menu-close href="#/app/gallery" ng-show="identity.isAuthenticated()">
+                    Gallery
+                </ion-item>
+                <ion-item nav-clear menu-close href="#/app/upload" ng-show="identity.isAuthenticated()">
+                    Upload Photo
+                </ion-item>
+            </ion-list>
+        </ion-content>
+    </ion-side-menu>
 </ion-side-menus>

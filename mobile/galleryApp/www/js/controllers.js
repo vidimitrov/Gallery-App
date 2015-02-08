@@ -1,48 +1,134 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['ngCordova'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
-  // Form data for the login modal
-  $scope.loginData = {};
+.controller('AppController', ['$scope', '$ionicModal', '$state', 'identity', 'auth',
+        function ($scope, $ionicModal, $state, identity, auth) {
+            $scope.identity = identity;
 
-  // Create the login modal that we will use later
-  $ionicModal.fromTemplateUrl('templates/login.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
+            $scope.loginData = {};
+            $scope.registerData = {};
 
-  // Triggered in the login modal to close it
-  $scope.closeLogin = function() {
-    $scope.modal.hide();
-  };
+            // Create the login modal that we will use later
+            $ionicModal.fromTemplateUrl('templates/login.html', {
+                scope: $scope
+            }).then(function(modal) {
+                $scope.loginModal = modal;
+            });
 
-  // Open the login modal
-  $scope.login = function() {
-    $scope.modal.show();
-  };
+            $ionicModal.fromTemplateUrl('templates/register.html', {
+                scope: $scope
+            }).then(function(modal) {
+                $scope.registerModal = modal;
+            });
 
-  // Perform the login action when the user submits the login form
-  $scope.doLogin = function() {
-    console.log('Doing login', $scope.loginData);
+            // Triggered in the login modal to close it
+            $scope.closeLogin = function() {
+                $scope.loginModal.hide();
+            };
 
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    $timeout(function() {
-      $scope.closeLogin();
-    }, 1000);
-  };
-})
+            // Open the login modal
+            $scope.login = function() {
+                $scope.loginModal.show();
+            };
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
-})
+            // Perform the login action when the user submits the login form
+            $scope.doLogin = function () {
+                auth.login($scope.loginData)
+                    .then(function () {
+                        $scope.closeLogin();
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
-});
+                        $state.go('app.gallery');
+                    });
+            };
+
+            $scope.doLogout = function () {
+                auth.logout()
+                .then(function () {
+                    if ($scope.user) {
+                        $scope.user.username = '';
+                        $scope.user.password = '';
+                    }
+                    $state.go('app.home');
+                });
+            };
+
+            // Triggered in the login modal to close it
+            $scope.closeSignup = function() {
+                $scope.registerModal.hide();
+            };
+
+            // Open the login modal
+            $scope.signup = function() {
+                $scope.registerModal.show();
+            };
+
+            $scope.doSignup = function () {
+                auth.signup($scope.registerData)
+                    .then(function () {
+                        $scope.closeSignup();
+
+                        $state.go('app.gallery');
+                    });
+            };
+}])
+
+.controller('GalleryController', ['$scope', 'identity', function($scope, identity) {
+    $scope.images = identity.getCurrentUser().images;
+}])
+
+.controller('UploadController', ['$scope', 'identity', '$cordovaCamera', '$http',
+        function($scope, identity, $cordovaCamera, $http) {
+            var currentUser = identity.getCurrentUser();
+
+            if (currentUser) {
+                $scope.images = currentUser.images;
+            }
+
+            $scope.takePicture = function() {
+                var options = {
+                    quality : 75,
+                    destinationType : Camera.DestinationType.DATA_URL,
+                    sourceType : Camera.PictureSourceType.CAMERA,
+                    allowEdit : true,
+                    encodingType: Camera.EncodingType.JPEG,
+                    targetWidth: 300,
+                    targetHeight: 300,
+                    popoverOptions: CameraPopoverOptions,
+                    saveToPhotoAlbum: false
+                };
+
+                $cordovaCamera.getPicture(options).then(function(pictureData) {
+                    // TODO: Remove the alert when ready
+                    alert(pictureData);
+
+                    $scope.uploadPicture(pictureData);
+                }, function(err) {
+
+                });
+            };
+
+            $scope.uploadPicture = function(data) {
+                var req = {
+                    method: 'POST',
+                    url: 'http://127.0.0.1:3350/' + currentUser._id + '/uploadPhoto',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    transformRequest: function(obj) {
+                        var str = [];
+                        for(var p in obj)
+                            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                        return str.join("&");
+                    },
+                    data: data
+                };
+
+                $http(req)
+                    .success(function () {
+
+                    })
+                    .error(function () {
+
+                    });
+            };
+        }
+]);
