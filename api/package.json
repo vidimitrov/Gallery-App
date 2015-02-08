@@ -13,15 +13,13 @@
   },
   "license": "MIT",
   "dependencies": {
-    "express": "^4.11.2",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.0.2",
     "cookie-parser": "^1.0.1",
+    "express": "^4.11.2",
     "express-session": "^1.7.6",
-    "q": "^1.0.1",
-    "seneca": "^0.6.1",
-    "seneca-auth": "^0.4.0",
-    "seneca-mongo-store": "^0.2.0",
-    "seneca-user": "^0.2.10"
+    "mongoose": "^3.8.23",
+    "passport": "^0.2.1",
+    "passport-local": "~1.0.0"
   }
 }

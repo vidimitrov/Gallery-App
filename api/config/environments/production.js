@@ -10,5 +10,6 @@ module.exports = {
         resave: true,
         saveUninitialized: true,
         secret: 'somespecialsecret'
-    }
+    },
+    db: 'mongodb://admin:admin@ds053090.mongolab.com:53090/gallery-app'
 };
