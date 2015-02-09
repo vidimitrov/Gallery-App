@@ -1,6 +1,7 @@
 <ion-view view-title="Gallery">
     <ion-content ng-show="identity.isAuthenticated()">
         <h3>Welcome to your gallery</h3>
+        <button class="button" ng-click="refreshGallery()">Refresh</button>
         <ion-list>
             <ion-item ng-repeat="image in images">
                 <img ng-src="data:image/jpeg;base64,{{image}}" alt=""/>

@@ -82,6 +82,13 @@ angular.module('starter.controllers', ['ngCordova'])
                 });
         }
 
+        $scope.refreshGallery = function () {
+            getAllImages(currentUser._id)
+                .then(function (images) {
+                    $scope.images = images;
+                });
+        };
+
         function getAllImages(userId) {
             var deffered = $q.defer();
 
