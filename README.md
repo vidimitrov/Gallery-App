@@ -19,6 +19,9 @@ Simple express api with Ionic mobile app for managing user's gallery
 ## API (with Express and Seneca micro services)
 - In progress
 
+## Recent changes
+1. Refresh button added to gallery to fix the bug with refreshing the images
+
 ## TODO
 1. Fix the functionality to upload files from the user file system
 2. Refactor the code
